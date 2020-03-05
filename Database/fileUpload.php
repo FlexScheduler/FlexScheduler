@@ -1,8 +1,9 @@
 <html>
   <body>
-    <form action="csvUpload.php" method="post" enctype="multipart/form-data">
+    <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post"
+      enctype="multipart/form-data">
       Select csv file to upload:
-      <input type="file" name="csvFile" id="csvFile"><br>
+      <input type="file" name="file" id="file"><br>
       Enter database credentials:<br>
       Server: <input type="text" name="server"><br>
       Username: <input type="text" name="username"><br>
@@ -12,8 +13,25 @@
     </form>
 
     <?php
-    // check form was submitted
-    if(isset($_POST["submit"])) {
+    // check form was submitted and file was selected
+    if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"])) {
+
+      // get file information
+      $targetDir = "uploads/";
+      $fileName = basename($_FILES["file"]["name"]);
+      $targetFilePath = $targetDir . $fileName;
+      $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+      // check file type is acceptable
+      $allowTypes = array("csv");
+      if (!in_array($fileType, $allowTypes)) {
+        die("File type not allowed.");
+      }
+
+      // check file is uploaded to server
+      if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
+        die("Could not upload file to server.");
+      }
 
       // establish conection
       $server = $_POST["server"];
@@ -21,6 +39,7 @@
       $password = $_POST["password"];
       $database = $_POST["database"];
       $conn = new mysqli($server, $username, $password, $database);
+      $conn->options(MYSQLI_OPT_LOCAL_INFILE, true);
 
       // check connection
       if ($conn->connect_error) {
@@ -141,7 +160,7 @@
         $conn->next_result();
       }
 
-      // create temporary table to import csv data
+      // create temporary table to upload csv data
       $sql = "
           CREATE TABLE IF NOT EXISTS CsvData(
               deptID VARCHAR(16),
@@ -181,12 +200,10 @@
         $conn->next_result();
       }
 
-      // import csv data into temporary table
-      $conn->options(MYSQLI_OPT_LOCAL_INFILE, true);
-      $fileLocation = $_FILES["csvFile"]["name"];
+      // upload csv data into temporary table
       $sql = "
           LOAD DATA LOCAL INFILE
-              '" . $fileLocation . "'
+              '" . $targetFilePath . "'
           INTO TABLE
               CsvData
           FIELDS TERMINATED BY
@@ -721,7 +738,7 @@
       }
 
       // display success
-      echo "Success: data from " . $_FILES["csvFile"]["name"] . " uploaded.";
+      echo "File upload successful.";
 
       // close connection
       $conn->close();
