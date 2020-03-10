@@ -1,16 +1,16 @@
+<?php
+if (isset($_POST["login"])) {
+    session_start();
+    $_SESSION["username"] = $_POST["username"];
+    $_SESSION["password"] = $_POST["password"];
+
+    header("Location: uploadDriver.php");
+}
+?>
+
 <html>
 
 <body>
-    <?php
-    if (isset($_POST["login"])) {
-        session_start();
-        $_SESSION["username"] = $_POST["username"];
-        $_SESSION["password"] = $_POST["password"];
-
-        header("Location: uploadDriver.php");
-    }
-    ?>
-    
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <label for="username">Enter your username:</label>
         <input type="text" id="username" name="username"/>
