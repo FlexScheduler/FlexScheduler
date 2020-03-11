@@ -17,7 +17,24 @@ function breakSubmit() {
 	endTime += ' ';
 	endTime += $("#endPeriod").val();
 
-	day = $("#breakDay").val();
+	//set default value for day
+	day = "";
+	
+	if ($('#breakDay1').is(':checked')) {
+		day = "M";
+	}
+	if ($('#breakDay2').is(':checked')) {
+		day += "T";
+	}
+	if ($('#breakDay3').is(':checked')) {
+		day += "W";
+	}
+	if ($('#breakDay4').is(':checked')) {
+		day += "R";
+	}
+	if ($('#breakDay5').is(':checked')) {
+		day += "F";
+	}
 
 	//Flag to prevent addition of Break if user incorrectly enters information
 	errorFlag = false;
@@ -29,6 +46,10 @@ function breakSubmit() {
 	//Check for period mismatch
 	else if ($("#startPeriod").val() == "PM" && $("#endPeriod").val() == "AM") {
 		alert("Selected End Time occurs before selected Start Time!");
+	}
+	//Check that at least one day was entered
+	else if(day === "") {
+		alert("Select the day(s) of the break");
 	}
 	//Do math with times
 	else {
