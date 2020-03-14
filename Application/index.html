@@ -37,7 +37,7 @@
       <img style="width:7%;padding-right:5px;"src="resources/lindenwood.png">
       <h5 class="my-0 mr-md-auto font-weight-normal">Student Scheduler</h5>
       <a style="margin:5px;"class="btn btn-primary" href="https://www.lindenwood.edu">Back to lindenwood</a>
-      <a class="btn btn-primary" href="tempLogin">Admin Login</a>
+      <a class="btn btn-primary" href="tempLogin.php">Admin Login</a>
     </div>
     <!-- This is the end of the header -->
 
@@ -133,13 +133,28 @@
               <button class="btn btn-primary" data-toggle="modal" data-target="#breakModal">Add Break</button>
             </div>
             <div class="card-body">
-              <ul class="list-unstyled mt-3 mb-4" id="breakList">
-                <li>
+              <div id="break-table" class="table-editable">
+                        <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
+                              class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                          <thead>
+                            <tr>
+                              <th class="text-center">Name</th>
+                              <th class="text-center">Days</th>
+                              <th class="text-center">Start</th>
+							  <th class="text-center">End</th>
+                              <th class="text-center"></th>
+                            </tr>
+                          </thead>
+                          <tbody id="break-table-body">
+                            <tr>
 
-                </li>
-                <li>
 
-                </li>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </div>
               </ul>
             </div>
           </div>
@@ -182,7 +197,7 @@
                               <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
                               <td class="pt-3-half" contenteditable="true">Blythe</td>
                               <td>
-                                <span class="table-remove"><button type="button"
+                                <span class="table-remove"><button type="button" onclick = "remClass(this);"
                                     class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span>
                               </td>
                             </tr>

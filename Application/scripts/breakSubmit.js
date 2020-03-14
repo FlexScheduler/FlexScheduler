@@ -1,4 +1,8 @@
 //Submit button for Breaks
+
+//keeps track of the number of breaks user has entered
+var noBreaks = 0;
+
 function breakSubmit() {
 	//add info as variables (will probably need to become global to work with SQL)
 	name = $("#breakName").val();
@@ -7,14 +11,12 @@ function breakSubmit() {
 	startTime = $("#startHour").val();
 	startTime += ':';
 	startTime += $("#startMinute").val();
-	startTime += ' ';
 	startTime += $("#startPeriod").val();
 
 	//endTime condensed into time format
 	endTime = $("#endHour").val();
 	endTime += ':';
 	endTime += $("#endMinute").val();
-	endTime += ' ';
 	endTime += $("#endPeriod").val();
 
 	//set default value for day
@@ -76,7 +78,31 @@ function breakSubmit() {
 		}
 		//If the flag was not set, add Break to list
 		if(!errorFlag)
-			$("#breakList").append('<li>'+ name + ': ' +  day + ' ' + startTime + ' - ' + endTime + '</li>');
+		{
+			//$("#breakList").append('<li>'+ name + ': ' +  day + ' ' + startTime + ' - ' + endTime + '</li>'); //old code
+		
+			//increment breaks as they are added
+			noBreaks++;
+		
+			$("#break-table-body").append("<tr><td class='pt-3-half' contenteditable='true'>" + name + "</td><td class='pt-3-half' contenteditable='true'>" + day + "</td><td class='pt-3-half' contenteditable='true'>" + startTime + "</td><td class='pt-3-half' contenteditable='true'>"+ endTime + "</td><td><span class='table-remove'><button type='button' onclick = 'remBreak(this);'class='btn btn-danger btn-rounded btn-sm my-0'>Remove</button></span></td></tr>");
+		}
 	}
+	
+	//exit modal
+	$('#breakModal').modal('hide');
 
 }
+
+//Remove button for breaks
+remBreak = (function(row) {
+    $(row).closest("tr").remove();
+	
+	//decrement breaks if they are removed
+	noBreaks--;
+
+	//console.log(noBreaks);
+});
+
+remClass = (function(row) {
+	$(row).closest("tr").remove();
+});
