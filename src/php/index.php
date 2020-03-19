@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Student Scheduler</title>
+    <title>FlexScheduler</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/pricing/">
 
@@ -32,14 +32,8 @@
   </head>
 
   <body>
-    <!-- This is the start of the headerbar -->
-    <div style="color:black;emphasis:bold;size:26px;"class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-red border-bottom box-shadow" >
-      <img style="width:7%;padding-right:5px;"src="../../img/lindenwood.png">
-      <h5 class="my-0 mr-md-auto font-weight-normal">Student Scheduler</h5>
-      <a style="margin:5px;"class="btn btn-primary" href="https://www.lindenwood.edu">Back to lindenwood</a>
-      <a class="btn btn-primary" href="tempLogin.php">Admin Login</a>
-    </div>
-    <!-- This is the end of the header -->
+    <!-- This is the header -->
+    <?php include "includes/header.php"; ?>
 
     <div class="container-fluid" style="max-width:75%">
         <div class="card-deck mb-3 text-center">
@@ -52,74 +46,112 @@
               <ul class="list-unstyled mt-3 mb-4">
                 <li>
                   <div class="form-group">
-                   <label for="exampleFormControlSelect1">Select Semester</label>
-                   <select class="form-control">
-                     <option>Spring</option>
-                     <option>Summer</option>
-                     <option>Fall</option>
-                   </select>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="exampleFormControlSelect1">Select Semester</label>
+                        <select class="form-control">
+                          <option>Spring</option>
+                          <option>Summer</option>
+                          <option>Fall</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-check-inline">
+                          <label class="form-check-label">
+                            <br/>
+                            <input type="checkbox" class="form-check-input" value="">Show online classes
+                          </label>
+                        </div>
+                      </div>
+                   </div>
                  </div>
                 </li>
                 <li>
                   <div class="form-group">
-                   <label for="exampleFormControlSelect1">Select Minimum Credit Hours</label>
-                   <select class="form-control">
-		     <option>1</option>
-		     <option>2</option>
-                     <option>3</option>
-                     <option>4</option>
-                     <option>5</option>
-                     <option>6</option>
-                     <option>7</option>
-                     <option>8</option>
-                     <option>9</option>
-                     <option>10</option>
-                     <option>11</option>
-                     <option selected>12</option>
-                     <option>13</option>
-                     <option>14</option>
-                     <option>15</option>
-                     <option>16</option>
-                     <option>17</option>
-                     <option>18</option>
-		     <option>19</option>
-		     <option>20</option>
-		     <option>21</option>
-		     <option>22</option>
-		     <option>23</option>
-		     <option>24</option>
-                   </select>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="exampleFormControlSelect1">Select Minimum Credit Hours</label>
+                        <select class="form-control">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                          <option>11</option>
+                          <option selected>12</option>
+                          <option>13</option>
+                          <option>14</option>
+                          <option>15</option>
+                          <option>16</option>
+                          <option>17</option>
+                          <option>18</option>
+                          <option>19</option>
+                          <option>20</option>
+                          <option>21</option>
+                          <option>22</option>
+                          <option>23</option>
+                          <option>24</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="exampleFormControlSelect1">Select Campus</label>
+                        <select class="form-control">
+                          <option>Saint Charles</option>
+                          <option>Belleville</option>
+                        </select>
+                      </div>
+                    </div>
                  </div>
                 </li>
                 <li>
                   <div class="form-group">
-                   <label for="exampleFormControlSelect1">Select Maximum Credit Hours</label>
-                   <select class="form-control">
-                     <option>1</option>
-		     <option>2</option>
-                     <option>3</option>
-                     <option>4</option>
-                     <option>5</option>
-                     <option>6</option>
-                     <option>7</option>
-                     <option>8</option>
-                     <option>9</option>
-                     <option>10</option>
-                     <option>11</option>
-                     <option>12</option>
-                     <option>13</option>
-                     <option>14</option>
-                     <option>15</option>
-                     <option>16</option>
-                     <option>17</option>
-                     <option selected>18</option>
-		     <option>19</option>
-		     <option>20</option>
-		     <option>21</option>
-		     <option>22</option>
-		     <option>23</option>
-		     <option>24</option>
-                   </select>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="exampleFormControlSelect1">Select Maximum Credit Hours</label>
+                        <select class="form-control">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                          <option>11</option>
+                          <option>12</option>
+                          <option>13</option>
+                          <option>14</option>
+                          <option>15</option>
+                          <option>16</option>
+                          <option>17</option>
+                          <option selected>18</option>
+                          <option>19</option>
+                          <option>20</option>
+                          <option>21</option>
+                          <option>22</option>
+                          <option>23</option>
+                          <option>24</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="exampleFormControlSelect1">8 Week Classes</label>
+                        <select class="form-control">
+                          <option selected>No 8 week classes</option>
+                          <option>First 8 weeks</option>
+                          <option>Second 8 weeks</option>
+                          <option>All 8 week classes</option>
+                        </select>
+
+
+                      </div>
+                    </div>
                  </div>
                 </li>
               </ul>
@@ -175,7 +207,8 @@
             </div>
             <div class="card-body">
               <ul class="list-unstyled mt-3 mb-4">
-                <li>
+                  <li><button class="btn btn-primary" >Add Courses</button></li>
+                  <li>
 
                   <!-- Editable table -->
 
@@ -368,6 +401,9 @@
     <div class="container-fluid" style="max-width:75%">
       <button style="margin-bottom: 5%;" class="btn-block btn btn-primary">Generate</button>
     </div>
+
+    <!-- This is the footer -->
+    <?php include "includes/footer.php"; ?>
 
 
     <!-- Bootstrap core JavaScript
