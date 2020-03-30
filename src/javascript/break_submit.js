@@ -103,6 +103,7 @@ remBreak = (function(row) {
 	//console.log(noBreaks);
 });
 
+//Remove button for courses
 remClass = (function(row) {
 	$(row).closest("tr").remove();
 });

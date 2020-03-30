@@ -1,3 +1,7 @@
+<?php
+include "config.php";
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -207,8 +211,10 @@
             </div>
             <div class="card-body">
               <ul class="list-unstyled mt-3 mb-4">
-                  <li><button class="btn btn-primary" >Add Courses</button></li>
+                  <li><button class="btn btn-primary" data-toggle="modal" data-target="#courseModal">Add Courses</button></li>
                   <li>
+				  
+				  
 
                   <!-- Editable table -->
 
@@ -249,6 +255,61 @@
           </div>
         </div>
       </div>
+      </div>
+	  
+	  <!-- Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+			<h5 class="modal-title" id="courseModalLabel">Search Course</h5>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <form>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-sm-4">
+                            <label for="courseName">Department ID</label>
+                        </div>
+                        <div class="col-sm-4">
+                          <select class="form-control" id="departID">
+                             <option value="0">- Select -</option>
+								<?php 
+								//Fetch Department
+								$sql_department = "SELECT DISTINCT deptID FROM sections";
+								$department_data = mysqli_query($con,$sql_department);
+								while($row = mysqli_fetch_assoc($department_data) ){
+									$departid = $row['deptID'];
+      
+									echo "<option value='".$departid."' >".$departid."</option>";
+								}
+								?>
+                          </select>
+						</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-4">
+                            <label for="courseName">Course Name</label>
+                        </div>
+                        <div class="col-sm-4">
+                          <select class="form-control" id="courseName">
+                            <option value="0">- Select -</option>
+                          </select>
+                        </div>
+                        
+                      </div>
+
+                   </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Modal -->
@@ -411,7 +472,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
@@ -422,5 +483,6 @@
       });
     </script>
     <script src="../javascript/break_submit.js"></script>
+	<script src="../javascript/course.js"></script>
   </body>
 </html>
