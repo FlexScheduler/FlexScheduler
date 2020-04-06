@@ -19,7 +19,7 @@ include "config.php";
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-    <link href="style/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
     <style>
       .btn-primary {
@@ -230,7 +230,7 @@ include "config.php";
                               <th class="text-center"></th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody id="course-table-body">
                             <tr>
                               <td class="pt-3-half" contenteditable="true">CSC14400</td>
                               <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
@@ -281,8 +281,9 @@ include "config.php";
 								$department_data = mysqli_query($con,$sql_department);
 								while($row = mysqli_fetch_assoc($department_data) ){
 									$departid = $row['deptID'];
-      
+									//Depart ID options add here
 									echo "<option value='".$departid."' >".$departid."</option>";
+									//Depending on ID option AJAX will populate the course name dropdown
 								}
 								?>
                           </select>
@@ -306,7 +307,7 @@ include "config.php";
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Add</button>
+              <button type="button" class="btn btn-primary" id="courseAdd">Add</button>
             </div>
           </div>
         </div>
