@@ -325,7 +325,7 @@ include "config.php";
             </div>
             <div class="modal-body">
               <div class="container">
-                <form>
+                <form id="breakForm">
                     <div class="form-group">
                       <div class="row">
                         <div class="col-sm-3">

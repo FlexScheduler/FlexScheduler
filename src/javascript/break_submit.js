@@ -85,12 +85,12 @@ function breakSubmit() {
 			noBreaks++;
 		
 			$("#break-table-body").append("<tr><td class='pt-3-half' contenteditable='true'>" + name + "</td><td class='pt-3-half' contenteditable='true'>" + day + "</td><td class='pt-3-half' contenteditable='true'>" + startTime + "</td><td class='pt-3-half' contenteditable='true'>"+ endTime + "</td><td><span class='table-remove'><button type='button' onclick = 'remBreak(this);'class='btn btn-danger btn-rounded btn-sm my-0'>Remove</button></span></td></tr>");
+			
+			//exit modal
+			$('#breakModal').modal('hide');
+			$('#breakForm').trigger('reset');
 		}
 	}
-	
-	//exit modal
-	$('#breakModal').modal('hide');
-
 }
 
 //Remove button for breaks
