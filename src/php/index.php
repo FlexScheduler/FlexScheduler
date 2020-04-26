@@ -53,7 +53,7 @@ include "config.php";
                     <div class="row">
                       <div class="col-lg-6">
                         <label for="exampleFormControlSelect1">Select Semester</label>
-                        <select class="form-control">
+                        <select class="form-control" id="term">
                           <option>Spring</option>
                           <option>Summer</option>
                           <option>Fall</option>
@@ -63,7 +63,7 @@ include "config.php";
                         <div class="form-check-inline">
                           <label class="form-check-label">
                             <br/>
-                            <input type="checkbox" class="form-check-input" value="">Show online classes
+                            <input type="checkbox" class="form-check-input" id="online" value="">Show online classes
                           </label>
                         </div>
                       </div>
@@ -75,7 +75,7 @@ include "config.php";
                     <div class="row">
                       <div class="col-lg-6">
                         <label for="exampleFormControlSelect1">Select Minimum Credit Hours</label>
-                        <select class="form-control">
+                        <select class="form-control" id="minCredit">
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -104,8 +104,8 @@ include "config.php";
                       </div>
                       <div class="col-lg-6">
                         <label for="exampleFormControlSelect1">Select Campus</label>
-                        <select class="form-control">
-                          <option>Saint Charles</option>
+                        <select class="form-control" id="campus">
+                          <option>MAIN</option>
                           <option>Belleville</option>
                         </select>
                       </div>
@@ -117,7 +117,7 @@ include "config.php";
                     <div class="row">
                       <div class="col-lg-6">
                         <label for="exampleFormControlSelect1">Select Maximum Credit Hours</label>
-                        <select class="form-control">
+                        <select class="form-control" id="maxCredit">
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -146,7 +146,7 @@ include "config.php";
                       </div>
                       <div class="col-lg-6">
                         <label for="exampleFormControlSelect1">8 Week Classes</label>
-                        <select class="form-control">
+                        <select class="form-control" id="eight">
                           <option selected>No 8 week classes</option>
                           <option>First 8 weeks</option>
                           <option>Second 8 weeks</option>
@@ -184,10 +184,7 @@ include "config.php";
                           </thead>
                           <tbody id="break-table-body">
                             <tr>
-
-
                             </tr>
-
                           </tbody>
                         </table>
                       </div>
@@ -224,7 +221,7 @@ include "config.php";
                         <table class="table table-bordered table-responsive-md table-striped text-center">
                           <thead>
                             <tr>
-                              <th class="text-center">Course Number</th>
+                              <th class="text-center">Department ID</th>
                               <th class="text-center">Course name</th>
                               <th class="text-center">Instructor</th>
                               <th class="text-center"></th>
@@ -232,9 +229,9 @@ include "config.php";
                           </thead>
                           <tbody id="course-table-body">
                             <tr>
-                              <td class="pt-3-half" contenteditable="true">CSC14400</td>
-                              <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
-                              <td class="pt-3-half" contenteditable="true">Blythe</td>
+                              <td class="pt-3-half" contenteditable="true">CSC</td>
+                              <td class="pt-3-half" contenteditable="true">14400-Computer Science 1</td>
+                              <td class="pt-3-half" contenteditable="true">Blythe, Stephen</td>
                               <td>
                                 <span class="table-remove"><button type="button" onclick = "remClass(this);"
                                     class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span>
@@ -474,104 +471,7 @@ include "config.php";
             </div>
 			<div class="card-body">
 			  <ul class="list-unstyled mt-3 mb-4" id="table-list">
-			    <li><h5 class="my-0 font-weight-normal">Schedule #1</h5></li>
-				<li>
-				  <div id="table" class="table-editable">
-                    <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
-                              class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
-                    <table class="table table-bordered table-responsive-md table-striped text-center">
-                      <thead>
-                        <tr>
-                          <th class="text-center">Department</th>
-                          <th class="text-center">Course ID</th>
-                          <th class="text-center">Type</th>
-                          <th class="text-center">Section</th>
-						  <th class="text-center">Course Name</th>
-						  <th class="text-center">Instructor</th>
-						  <th class="text-center">Days</th>
-						  <th class="text-center">Room</th>
-						  <th class="text-center">Date</th>
-						  <th class="text-center">Time</th>
-                        </tr>
-                      </thead>
-					  <tbody>
-                        <tr>
-                          <td class="pt-3-half" contenteditable="true">CSC</td>
-						  <td class="pt-3-half" contenteditable="true">14400</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">Ol0 1</td>
-						  <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
-                          <td class="pt-3-half" contenteditable="true">Blythe</td>
-						  <td class="pt-3-half" contenteditable="true">MWF</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">1/20/2020 - 5/11/2020</td>
-						  <td class="pt-3-half" contenteditable="true">ARR</td>
-                        </tr>
-						<tr>
-                          <td class="pt-3-half" contenteditable="true">CSC</td>
-						  <td class="pt-3-half" contenteditable="true">14400</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">Ol0 1</td>
-						  <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
-                          <td class="pt-3-half" contenteditable="true">Blythe</td>
-						  <td class="pt-3-half" contenteditable="true">MWF</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">1/20/2020 - 5/11/2020</td>
-						  <td class="pt-3-half" contenteditable="true">ARR</td>
-                        </tr>
-                      </tbody>
-                    </table>
-				  </div>
-				</li><br>
-				<li><h5 class="my-0 font-weight-normal">Schedule #2</h5></li>
-				<li>
-				  <div id="table" class="table-editable">
-                    <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
-                              class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
-                    <table class="table table-bordered table-responsive-md table-striped text-center">
-                      <thead>
-                        <tr>
-                          <th class="text-center">Department</th>
-                          <th class="text-center">Course ID</th>
-                          <th class="text-center">Type</th>
-                          <th class="text-center">Section</th>
-						  <th class="text-center">Course Name</th>
-						  <th class="text-center">Instructor</th>
-						  <th class="text-center">Days</th>
-						  <th class="text-center">Room</th>
-						  <th class="text-center">Date</th>
-						  <th class="text-center">Time</th>
-                        </tr>
-                      </thead>
-					  <tbody id="course-table-body">
-                        <tr>
-                          <td class="pt-3-half" contenteditable="true">CSC</td>
-						  <td class="pt-3-half" contenteditable="true">14400</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">Ol0 1</td>
-						  <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
-                          <td class="pt-3-half" contenteditable="true">Blythe</td>
-						  <td class="pt-3-half" contenteditable="true">MWF</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">1/20/2020 - 5/11/2020</td>
-						  <td class="pt-3-half" contenteditable="true">ARR</td>
-                        </tr>
-						<tr>
-                          <td class="pt-3-half" contenteditable="true">CSC</td>
-						  <td class="pt-3-half" contenteditable="true">14400</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">Ol0 1</td>
-						  <td class="pt-3-half" contenteditable="true">Computer Science 1</td>
-                          <td class="pt-3-half" contenteditable="true">Blythe</td>
-						  <td class="pt-3-half" contenteditable="true">MWF</td>
-						  <td class="pt-3-half" contenteditable="true">Online</td>
-						  <td class="pt-3-half" contenteditable="true">1/20/2020 - 5/11/2020</td>
-						  <td class="pt-3-half" contenteditable="true">ARR</td>
-                        </tr>
-                      </tbody>
-                    </table>
-				  </div>
-				</li>
+			   
 			  </ul>
 			</div>
 		  </div>
