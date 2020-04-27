@@ -26,8 +26,6 @@ var timeCol = false;
 $(document).ready(function(){
 	
 	$( "#generate" ).on( "click", function() {
-		//To order generated schedules
-		var scheduleNo = 1;
 		
 		//Get variables to run correct query
 		var term = $("#term").val();
@@ -38,15 +36,9 @@ $(document).ready(function(){
 		//We can deal with min and max credit later
 		//Same for 8 week courses
 		
-		var breakCheck = 1;
-		if(noBreaks == 0) {
-			breakCheck = 0;
-		}
-		
 		//Static for now
 		var deptCheck = 1;
 		var courseCheck = 1;
-		var instrucCheck = 0;
 		
 		/*console.log(term);
 		console.log(online);
@@ -57,7 +49,8 @@ $(document).ready(function(){
 		var courseTable = $("#course-table-body");
 		var deptId = new Array();
 		var courseId = new Array();
-		var instructor = new Array();
+		var firstName = new Array();
+		var lastName = new Array();
 		//Keep track of how many rows to account for
 		var rowCount = 0;
 		//Temp variables
@@ -70,10 +63,21 @@ $(document).ready(function(){
             inst = $row.eq(2).text();
 			//Get rid of course name as it is unnecessary
 			var arr = course.split('-');
-        //Add to array to use outside of loop
+		//Add to array to use outside of loop
 			deptId.push(dept);
 			courseId.push(arr[0]);
-			instructor.push(inst);
+			//Split instructor first name and last name if necessary
+			if(inst === "Any")
+			{
+				firstName.push("Any");
+				lastName.push("Any");
+			}
+			else
+			{
+				var instructor = inst.split(',');
+				lastName.push(instructor[0]);
+				firstName.push(instructor[1]);
+			}
 			rowCount++;
 			
 			/*console.log(deptId[i]);
@@ -85,11 +89,11 @@ $(document).ready(function(){
 		$.ajax({
             url: 'querylogic.php',
             type: 'post',
-            data: {term:term, online:online, campus:campus, breakCheck:breakCheck, deptCheck:deptCheck, rowCount:rowCount,
-				courseCheck:courseCheck, instrucCheck:instrucCheck, deptId:deptId, courseId:courseId},
+            data: {term:term, online:online, campus:campus, deptCheck:deptCheck, rowCount:rowCount,
+				courseCheck:courseCheck, firstName:firstName, lastName:lastName, deptId:deptId, courseId:courseId},
             dataType: 'json',
             success:function(response){
-				//console.log(response);
+				console.log(response);
 				
 				$("#table-list").empty();
 				
@@ -102,6 +106,8 @@ $(document).ready(function(){
 				var tree = toTree(response);
 				//keeps track of taken leaf nodes
 				var takenIDs = new Array();
+				
+				console.log(tree);
 				
 				var scheduleNo = 0;
 				var loopFlag = true;
@@ -124,6 +130,7 @@ $(document).ready(function(){
 					
 					loopFlag = getSchedule(coursesToPrint, tree.children[0], takenIDs, week);
 					
+					//if there is no conflict with time and the leaf node is unused
 					if(timeCol == false && loopFlag == true)
 					{
 						scheduleNo++;
@@ -153,11 +160,21 @@ $(document).ready(function(){
 							'<td class="pt-3-half">'+ coursesToPrint[i]['crseID'] +'</td>' +
 							'<td class="pt-3-half">'+ coursesToPrint[i]['secID'] +'</td>' +
 							'<td class="pt-3-half">'+ coursesToPrint[i]['crseName'] +'</td>' +
-							'<td class="pt-3-half">'+ coursesToPrint[i]['instrFName'] + ' '+ coursesToPrint[i]['instrLName'] + '</td>' +
-							'<td class="pt-3-half">'+ coursesToPrint[i]['dayID'] +'</td>' +
-							'<td class="pt-3-half">'+ coursesToPrint[i]['bldgID'] + coursesToPrint[i]['rmNum'] +'</td>' +
-							'<td class="pt-3-half">'+ coursesToPrint[i]['strtDate'] + ' - ' + coursesToPrint[i]['endDate'] +'</td>' +
-							'<td class="pt-3-half">'+ coursesToPrint[i]['strtTime'] + ' - ' + coursesToPrint[i]['endTime'] +'</td></tr>';
+							'<td class="pt-3-half">'+ coursesToPrint[i]['instrFName'] + ' '+ coursesToPrint[i]['instrLName'] + '</td>';
+							//check if current course is online
+							if(coursesToPrint[i]['dayID'] !== undefined)
+							{
+								intohtml += '<td class="pt-3-half">'+ coursesToPrint[i]['dayID'] +'</td>' +
+								'<td class="pt-3-half">'+ coursesToPrint[i]['bldgID'] + coursesToPrint[i]['rmNum'] +'</td>' +
+								'<td class="pt-3-half">'+ coursesToPrint[i]['strtDate'] + ' - ' + coursesToPrint[i]['endDate'] +'</td>' +
+								'<td class="pt-3-half">'+ coursesToPrint[i]['strtTime'] + ' - ' + coursesToPrint[i]['endTime'] +'</td></tr>';
+							}
+							else
+							{
+								intohtml += '<td class="pt-3-half">ARR</td><td class="pt-3-half">ARR</td>' +
+								'<td class="pt-3-half">'+ coursesToPrint[i]['strtDate'] + ' - ' + coursesToPrint[i]['endDate'] +'</td>' +
+								'<td class="pt-3-half">ARR</td>';
+							}
 						}
 						intohtml += '</tbody></table></div></li>';
 		
@@ -303,6 +320,9 @@ $(document).ready(function(){
 				else
 					addSections(response, root.children[j], cor+1, 0);
 			}
+			//For single section courses
+			else
+				addSections(response, root.children[j], cor+1, 0);
 			pos++;
 		}
 		return;
@@ -318,7 +338,8 @@ $(document).ready(function(){
 				if(node.ID == takenIDs[i])
 					return false;
 			
-			checkDays(node.value, dict);
+			if(node.value['dayID'] !== undefined)
+				checkDays(node.value, dict);
 			scheduleArr.push(node.value);
 			takenIDs.push(node.ID);
 			return true;
@@ -330,10 +351,17 @@ $(document).ready(function(){
 				if(getSchedule(scheduleArr, node.children[i], takenIDs, dict) == true)
 				{
 					if(typeof node.value == 'object')
-						if(checkDays(node.value, dict) == false)
-							scheduleArr.push(node.value);
+					{
+						if(node.value['dayID'] !== undefined)
+						{
+							if(checkDays(node.value, dict) == false)
+								scheduleArr.push(node.value);
+							else
+								timeCol = true;
+						}
 						else
-							timeCol = true;
+							scheduleArr.push(node.value);
+					}
 					return true;
 				}
 			}

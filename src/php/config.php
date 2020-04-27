@@ -21,4 +21,33 @@ if (isset($_POST['dept'])) {
 	//AJAX accepts json format
 	echo json_encode($courseName);
 }
+
+if (isset($_POST['courseID'])) {
+	
+	$courseid = $_POST['courseID'];
+	$deptid = $_POST['deptID'];
+	$instructors = array();
+	
+	$sql = "SELECT DISTINCT instrFName,instrLName FROM sessioninstructors WHERE crseID='$courseid' AND deptID='$deptid'";
+	$result = mysqli_query($con,$sql);
+	
+	while( $row = mysqli_fetch_array($result) ){
+		$fName = $row['instrFName'];
+		$lName = $row['instrLName'];
+
+		$instructors[] = array("instrFName" => $fName, "instrLName" => $lName);
+	}
+	
+	$Asql = "SELECT DISTINCT instrFName,instrLName FROM arrangedinstructors WHERE crseID='$courseid' AND deptID='$deptid'";
+	$Aresult = mysqli_query($con, $Asql);
+	while( $row = mysqli_fetch_array($Aresult) ){
+		$fName = $row['instrFName'];
+		$lName = $row['instrLName'];
+
+		$instructors[] = array("instrFName" => $fName, "instrLName" => $lName);
+	}
+    
+	//AJAX accepts json format
+	echo json_encode($instructors);
+}
 ?>

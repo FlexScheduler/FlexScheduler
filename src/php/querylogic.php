@@ -4,21 +4,18 @@ require 'config.php';
 $onlineCheck = $_POST['online'];
 $departmentCheck = $_POST['deptCheck'];
 $courseCheck = $_POST['courseCheck'];
-$instrucCheck = $_POST['instrucCheck'];
-$breakCheck = $_POST['breakCheck'];
+$breakCheck = 0;
 $campus = $_POST['campus'];
 $deptID = $_POST['deptId'];
 $crseID = $_POST['courseId'];
 $term = $_POST['term'];
 $rowCount = $_POST['rowCount'];
-$instrFName; $instrLName; $strtTime; $endTime; $day; $secID;
+$firstName = $_POST['firstName'];
+$lastName = $_POST['lastName'];
+$strtTime; $endTime; $day; $secID;
 
-/*Either need to make a semester tag or run a query to get the
-  end date and use that to judge semesters, online options will have
-  to run both queries in order to get all results*/
-
-/*A loop will run across this whole query list and each query gets put in an array of arrays
-The finished array will be put in an array of arrays of arrays to be echoed back to the javascript file*/
+/*A loop will run across this whole query list and each query gets put in an array of objects
+The finished array will be put in an array of arrays of objects to be echoed back to the javascript file*/
 $result = array();
 
 for($i = 0; $i < $rowCount; $i++)
@@ -29,14 +26,23 @@ for($i = 0; $i < $rowCount; $i++)
 	$depart = $deptID[$i];
 	$course = $crseID[$i];
 
+	if($lastName[$i] == "Any")
+		$instrucCheck = False;
+	else
+	{
+		$instrFName = $firstName[$i];
+		$instrLName = $lastName[$i];
+		$instrucCheck = True;
+	}
+
   if ($term == "Fall"){
   //Online classes are wanted
   if($onlineCheck == True){
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -75,7 +81,7 @@ for($i = 0; $i < $rowCount; $i++)
              "$instrFName" AND instrLName = "$instrLName"; */
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
@@ -108,9 +114,9 @@ for($i = 0; $i < $rowCount; $i++)
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
              sections.deptID = "$deptID" AND crseID = $crseID;*/
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -145,14 +151,14 @@ for($i = 0; $i < $rowCount; $i++)
         }
       }//Course not entered
     }//Department Check
-  }//Online SELECTed
+  }//Online selected
   //No online
   else{
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -178,7 +184,7 @@ for($i = 0; $i < $rowCount; $i++)
             instrLName = "$instrLName" AND campus = $campus;*/
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
@@ -201,9 +207,9 @@ for($i = 0; $i < $rowCount; $i++)
             Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
             campus = $campus;*/
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -232,11 +238,11 @@ for($i = 0; $i < $rowCount; $i++)
   else if ($term == "Spring"){
   //Online classes are wanted
   if($onlineCheck == True){
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -275,7 +281,7 @@ for($i = 0; $i < $rowCount; $i++)
              "$instrFName" AND instrLName = "$instrLName"; */
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
@@ -295,22 +301,22 @@ for($i = 0; $i < $rowCount; $i++)
           }
           //No breaks entered
           else{
-            /*Query
-            crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
-            sessions.endTime,sessions.dayID,bldgID,rmNum,campus From Sessions I
-            nner Join Sections USING (deptID,crseID,secID) INNER JOIN
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
+            sessions.endTime,sessions.dayID,bldgID,rmNum, secID From sessions
+            INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
             sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-            Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
-            campus = $campus;
+            Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
+            campus = '$campus'";
 
             //Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+            $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID From Sections
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID;*/
+             sections.deptID = '$depart' AND crseID = '$course'";
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -345,14 +351,14 @@ for($i = 0; $i < $rowCount; $i++)
         }
       }//Course not entered
     }//Department Check
-  }//Online SELECTed
+  }//Online selected
   //No online
   else{
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -368,28 +374,28 @@ for($i = 0; $i < $rowCount; $i++)
           }
           //Breaks not entered
           else{
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+            
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND
-            sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-            instrLName = "$instrLName" AND campus = $campus;*/
+            strtTime,endTime) Where sessions.deptID = '$depart' AND
+            sessions.crseID = '$course' AND instrFName = '$instrFName' AND
+            instrLName = '$instrLName' AND campus = '$campus'";
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
-            /*Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND sessions.crseID
-            = "$crseID" AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
-            AND dayID != '$day' AND campus = $campus;*/
+            strtTime,endTime) Where sessions.deptID = '$deptID' AND sessions.crseID
+            = '$crseID' AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
+            AND dayID != '$day' AND campus = '$campus'";
           }
           //No breaks entered
           else{
@@ -401,9 +407,9 @@ for($i = 0; $i < $rowCount; $i++)
             Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
             campus = '$campus'";
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -432,11 +438,11 @@ for($i = 0; $i < $rowCount; $i++)
   if ($term == "Summer"){
   //Online classes are wanted
   if($onlineCheck == True){
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -475,7 +481,7 @@ for($i = 0; $i < $rowCount; $i++)
              "$instrFName" AND instrLName = "$instrLName"; */
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
@@ -508,9 +514,9 @@ for($i = 0; $i < $rowCount; $i++)
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
              sections.deptID = "$deptID" AND crseID = $crseID;*/
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -545,14 +551,14 @@ for($i = 0; $i < $rowCount; $i++)
         }
       }//Course not entered
     }//Department Check
-  }//Online SELECTed
+  }//Online selected
   //No online
   else{
-    //Department is SELECTed
+    //Department is selected
     if($departmentCheck == True){
-      //Course is SELECTed
+      //Course is selected
       if($courseCheck == True){
-        //Teacher is SELECTed
+        //Teacher is selected
         if($instrucCheck == True){
           //Breaks entered
           if($breakCheck == True){
@@ -578,7 +584,7 @@ for($i = 0; $i < $rowCount; $i++)
             instrLName = "$instrLName" AND campus = $campus;*/
           }
         }
-        //Teacher not SELECTed
+        //Teacher not selected
         else{
           //Breaks entered
           if($breakCheck == True){
@@ -601,9 +607,9 @@ for($i = 0; $i < $rowCount; $i++)
             Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
             campus = $campus;*/
           }
-        }//Teacher not SELECTed
-      }//Course SELECTed
-      //Course is not SELECTed
+        }//Teacher not selected
+      }//Course selected
+      //Course is not selected
       else{
         //Breaks entered
         if($breakCheck == True){
@@ -671,6 +677,23 @@ for($i = 0; $i < $rowCount; $i++)
 		}
 		else
 			$new = 1;
+	}
+	//if online was selected, run the second query and append
+	if($onlineCheck == True)
+	{
+		$onlineQuery = mysqli_query($con, $sqlOnline);
+		
+		while($row = mysqli_fetch_array($onlineQuery) ){
+			$crseName = $row['crseName'];
+			$fName = $row['instrFName'];
+			$lName = $row['instrLName'];
+			$strtDate = $row['strtDate'];
+			$endDate = $row['endDate'];
+			$secID = $row['secID'];
+			
+			$rowResult[] = array("crseName" => $crseName, "instrFName" => $fName, "instrLName" => $lName, "strtDate" => $strtDate,
+				"endDate" => $endDate, "secID" => $secID, "deptID" => $depart, "crseID" => $course);
+		}
 	}
 	
 	//Put array of results into the final array

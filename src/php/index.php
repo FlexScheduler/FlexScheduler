@@ -231,7 +231,7 @@ include "config.php";
                             <tr>
                               <td class="pt-3-half" contenteditable="true">CSC</td>
                               <td class="pt-3-half" contenteditable="true">14400-Computer Science 1</td>
-                              <td class="pt-3-half" contenteditable="true">Blythe, Stephen</td>
+                              <td class="pt-3-half" contenteditable="true">Blythe,Stephen</td>
                               <td>
                                 <span class="table-remove"><button type="button" onclick = "remClass(this);"
                                     class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span>
@@ -295,8 +295,17 @@ include "config.php";
                             <option value="0">- Select -</option>
                           </select>
                         </div>
-                        
-                      </div>
+					  </div>
+					  <div class="row">
+						<div class="col-sm-4">
+                            <label for="instructor">Instructor</label>
+                        </div>
+                        <div class="col-sm-4">
+                          <select class="form-control" id="instructor">
+                            <option value="Any">- Select -</option>
+                          </select>
+                        </div>
+					  </div>
 
                    </div>
                 </form>
