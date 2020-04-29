@@ -11,13 +11,13 @@ function breakSubmit() {
 	startTime = $("#startHour").val();
 	startTime += ':';
 	startTime += $("#startMinute").val();
-	startTime += $("#startPeriod").val();
+	startTime += ':00';
 
 	//endTime condensed into time format
 	endTime = $("#endHour").val();
 	endTime += ':';
 	endTime += $("#endMinute").val();
-	endTime += $("#endPeriod").val();
+	endTime += ':00';
 
 	//set default value for day
 	day = "";
@@ -71,9 +71,37 @@ function breakSubmit() {
 				}
 			}
 			//If end time is before start time, tell the user they're still wrong
-			else if(parseInt($("#startHour").val()) > parseInt($("#endHour").val())) {
+			else if(parseInt($("#startHour").val()) > parseInt($("#endHour").val()) 
+				&& ($("#startHour").val() !== "12") && ($("#endHour").val() !== "12")) {
 				alert("Selected End Time occurs before selected Start Time!");
 				errorFlag = true;
+			}
+		}
+		//Convert to military time
+		if($("#startPeriod").val() === "PM" && $("#startHour").val() !== "12") {
+			startTime = (parseInt($("#startHour").val()) + 12);
+			startTime += ':';
+			startTime += $("#startMinute").val();
+			startTime += ':00';
+		}
+		else if($("#startHour").val() === "12") {
+			if($("#startPeriod").val() === "AM") {
+				startTime = '00:';
+				startTime += $("#startMinute").val();
+				startTime += ':00';
+			}
+		}
+		if($("#endPeriod").val() === "PM" && $("#endHour").val() !== "12") {
+			endTime = (parseInt($("#endHour").val()) + 12);
+			endTime += ':';
+			endTime += $("#endMinute").val();
+			endTime += ':00';
+		}
+		else if($("#endHour").val() === "12") {
+			if($("#endPeriod").val() === "AM") {
+				startTime = '00:';
+				startTime += $("#endMinute").val();
+				startTime += ':00';
 			}
 		}
 		//If the flag was not set, add Break to list
@@ -84,7 +112,11 @@ function breakSubmit() {
 			//increment breaks as they are added
 			noBreaks++;
 		
-			$("#break-table-body").append("<tr><td class='pt-3-half' contenteditable='true'>" + name + "</td><td class='pt-3-half' contenteditable='true'>" + day + "</td><td class='pt-3-half' contenteditable='true'>" + startTime + "</td><td class='pt-3-half' contenteditable='true'>"+ endTime + "</td><td><span class='table-remove'><button type='button' onclick = 'remBreak(this);'class='btn btn-danger btn-rounded btn-sm my-0'>Remove</button></span></td></tr>");
+			$("#break-table-body").append("<tr><td class='pt-3-half' contenteditable='true'>" + name +
+			"</td><td class='pt-3-half' contenteditable='true'>" + day + 
+			"</td><td class='pt-3-half' contenteditable='true'>" + startTime + 
+			"</td><td class='pt-3-half' contenteditable='true'>"+ endTime + 
+			"</td><td><span class='table-remove'><button type='button' onclick = 'remBreak(this);'class='btn btn-danger btn-rounded btn-sm my-0'>Remove</button></span></td></tr>");
 			
 			//exit modal
 			$('#breakModal').modal('hide');

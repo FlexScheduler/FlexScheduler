@@ -38,7 +38,6 @@ $(document).ready(function(){
 		
 		//Static for now
 		var deptCheck = 1;
-		var courseCheck = 1;
 		
 		/*console.log(term);
 		console.log(online);
@@ -57,7 +56,7 @@ $(document).ready(function(){
 		var dept, course, inst;
 		
 		courseTable.find('tr').each(function (i, el) {
-        var $row = $(this).find('td'),
+			var $row = $(this).find('td'),
             dept = $row.eq(0).text(),
             course = $row.eq(1).text(),
             inst = $row.eq(2).text();
@@ -90,20 +89,19 @@ $(document).ready(function(){
             url: 'querylogic.php',
             type: 'post',
             data: {term:term, online:online, campus:campus, deptCheck:deptCheck, rowCount:rowCount,
-				courseCheck:courseCheck, firstName:firstName, lastName:lastName, deptId:deptId, courseId:courseId},
+				firstName:firstName, lastName:lastName, deptId:deptId, courseId:courseId},
             dataType: 'json',
             success:function(response){
 				console.log(response);
 				
 				$("#table-list").empty();
-				
-				//array for previous course orderings
-				var allSchedules = new Array();
-				
-				//array for course info
-				var coursesToPrint = new Array();
+	
 				//convert 2d array to tree
 				var tree = toTree(response);
+		
+				//array for course info
+				var coursesToPrint = new Array();
+		
 				//keeps track of taken leaf nodes
 				var takenIDs = new Array();
 				
@@ -116,8 +114,8 @@ $(document).ready(function(){
 				while(loopFlag == true)
 				{
 					//create a dictionary for each day of the week
-					var week = {};
-					week['monStart'] = new Array();
+					var week = getBreaks();
+					/*week['monStart'] = new Array();
 					week['monEnd'] = new Array();
 					week['tuesStart'] = new Array();
 					week['tuesEnd'] = new Array();
@@ -127,7 +125,10 @@ $(document).ready(function(){
 					week['thursEnd'] = new Array();
 					week['friStart'] = new Array();
 					week['friEnd'] = new Array();
-					
+			
+			
+					getBreaks(week);*/
+			
 					loopFlag = getSchedule(coursesToPrint, tree.children[0], takenIDs, week);
 					
 					//if there is no conflict with time and the leaf node is unused
@@ -185,13 +186,12 @@ $(document).ready(function(){
 					coursesToPrint = [];
 					timeCol = false;
 				}
-		
+				
 			},
 			error:function(response, stat, err){
 				console.log(err);
 			}
-		
-        });
+		});
 	});
 	
 	//Returns false if there is no time conflict, otherwise returns true
@@ -205,8 +205,6 @@ $(document).ready(function(){
 		var endTime = section['endTime'].split(':');
 		var endHour = endTime[0];
 		var endMin = endTime[1];
-			
-		var overlap = false;
 			
 		//checks for conflict one day at a time
 		for(var j=0; j < day.length; j++)
@@ -241,26 +239,34 @@ $(document).ready(function(){
 				
 			//check dictionary to see if the start or end times are between existing start and end times
 			for(var i=0; i < dict[currentDayS].length; i++){
-				if(startHour == dict[currentDayS][i][0])
-				{ //two classes cannot start at the same time
-					if(startMin == dict[currentDayS][i][1])
+				if(startHour === dict[currentDayS][i][0])
+				{ //two classes/break cannot start at the same time
+					if(startMin === dict[currentDayS][i][1])
 					{
-						overlap = true;
+						return true;
 					}
 				}
-				if(endHour == dict[currentDayS][i][0])
+				if(endHour === dict[currentDayS][i][0])
 				{ //class cannot end after another one starts
 					if(endMin >= dict[currentDayS][i][1])
 					{
-						overlap = true;
+						return true;
 					}
 				}
-				if(startHour == dict[currentDayE][i][0])
+				if(startHour === dict[currentDayE][i][0])
 				{ //class cannot start before another one ends
 					if(startMin <= dict[currentDayE][i][1])
 					{
-						overlap = true;
+						return true;
 					}
+				}
+				if(endHour > dict[currentDayS][i][0] && endHour < dict[currentDayE][i][0])
+				{ //if class ends after a start time and before an end time, there is a conflict
+					return true;
+				}
+				if(startHour > dict[currentDayS][i][0] && startHour < dict[currentDayE][i][0])
+				{ //if class starts after a start time and before an end time, there is a conflict
+					return true;
 				}
 			}
 			
@@ -270,7 +276,7 @@ $(document).ready(function(){
 			
 		}//for loop
 		
-		return overlap;
+		return false;
 		
 	}//checkDays function
 	
@@ -292,7 +298,7 @@ $(document).ready(function(){
 		}
 		
 		return root;
-	}
+	}//toTree function
 	
 	//adds course sections to the tree
 	function addSections(response, root, cor, pos) {
@@ -320,13 +326,13 @@ $(document).ready(function(){
 				else
 					addSections(response, root.children[j], cor+1, 0);
 			}
-			//For single section courses
+			//For single section courses or if pos is at end of array
 			else
 				addSections(response, root.children[j], cor+1, 0);
 			pos++;
 		}
 		return;
-	}
+	}//addSections function
 	
 	//builds a schedule and puts it in an array
 	//also keeps track of which leaf nodes have been found already
@@ -338,9 +344,15 @@ $(document).ready(function(){
 				if(node.ID == takenIDs[i])
 					return false;
 			
-			if(node.value['dayID'] !== undefined)
-				checkDays(node.value, dict);
-			scheduleArr.push(node.value);
+			if(node.value['dayID'] !== undefined) //ensure the root or course level is not pushed
+			{
+				if(checkDays(node.value, dict) == false)
+					scheduleArr.push(node.value);
+				else
+					timeCol = true;
+			}
+			else if(typeof node.value == 'object') //ensures online courses are pushed
+				scheduleArr.push(node.value);
 			takenIDs.push(node.ID);
 			return true;
 		}
@@ -350,16 +362,16 @@ $(document).ready(function(){
 			{
 				if(getSchedule(scheduleArr, node.children[i], takenIDs, dict) == true)
 				{
-					if(typeof node.value == 'object')
+					if(typeof node.value == 'object') //ensure the root or course level is not pushed
 					{
-						if(node.value['dayID'] !== undefined)
+						if(node.value['dayID'] !== undefined) //no need to run day check on online courses
 						{
 							if(checkDays(node.value, dict) == false)
 								scheduleArr.push(node.value);
 							else
 								timeCol = true;
 						}
-						else
+						else //pushes online courses
 							scheduleArr.push(node.value);
 					}
 					return true;
@@ -367,6 +379,67 @@ $(document).ready(function(){
 			}
 		}
 		return false;
-	}
+	}//getSchedule function
+	
+	//fills dictionary with the times for breaks
+	function getBreaks()
+	{
+		var breakWeek = {};
+			breakWeek['monStart'] = new Array();
+			breakWeek['monEnd'] = new Array();
+			breakWeek['tuesStart'] = new Array();
+			breakWeek['tuesEnd'] = new Array();
+			breakWeek['wedStart'] = new Array();
+			breakWeek['wedEnd'] = new Array();
+			breakWeek['thursStart'] = new Array();
+			breakWeek['thursEnd'] = new Array();
+			breakWeek['friStart'] = new Array();
+			breakWeek['friEnd'] = new Array();
+		//Get breaks from table
+		var breakTable = $("#break-table-body");
+		
+		breakTable.find('tr').each(function () {
+			//temp variables
+			var tempDay, tempStart, tempEnd;
+			
+			var $row = $(this).find('td'),
+			tempDay = $row.eq(1).text(),
+			tempStart = $row.eq(2).text(),
+			tempEnd = $row.eq(3).text();
+			
+			var startTime = tempStart.split(':');
+			var endTime = tempEnd.split(':');
+			
+			for(var i=0; i < tempDay.length; i++)
+			{
+				if(tempDay[i] == 'M')
+				{
+					breakWeek['monStart'].push(startTime);
+					breakWeek['monEnd'].push(endTime);
+				}
+				else if(tempDay[i] == 'T')
+				{
+					breakWeek['tuesStart'].push(startTime);
+					breakWeek['tuesEnd'].push(endTime);
+				}
+				else if(tempDay[i] == 'W')
+				{
+					breakWeek['wedStart'].push(startTime);
+					breakWeek['wedEnd'].push(endTime);
+				}
+				else if(tempDay[i] == 'R')
+				{
+					breakWeek['thursStart'].push(startTime);
+					breakWeek['thursEnd'].push(endTime);
+				}
+				else if(tempDay[i] == 'F')
+				{
+					breakWeek['friStart'].push(startTime);
+					breakWeek['friEnd'].push(endTime);
+				}
+			}
+		});
+		return breakWeek;
+	}//getBreaks function
 	
 });
