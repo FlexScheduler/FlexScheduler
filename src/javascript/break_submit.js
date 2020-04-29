@@ -112,10 +112,10 @@ function breakSubmit() {
 			//increment breaks as they are added
 			noBreaks++;
 		
-			$("#break-table-body").append("<tr><td class='pt-3-half' contenteditable='true'>" + name +
-			"</td><td class='pt-3-half' contenteditable='true'>" + day + 
-			"</td><td class='pt-3-half' contenteditable='true'>" + startTime + 
-			"</td><td class='pt-3-half' contenteditable='true'>"+ endTime + 
+			$("#break-table-body").append("<tr><td class='pt-3-half'>" + name +
+			"</td><td class='pt-3-half'>" + day + 
+			"</td><td class='pt-3-half'>" + startTime + 
+			"</td><td class='pt-3-half'>"+ endTime + 
 			"</td><td><span class='table-remove'><button type='button' onclick = 'remBreak(this);'class='btn btn-danger btn-rounded btn-sm my-0'>Remove</button></span></td></tr>");
 			
 			//exit modal

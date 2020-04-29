@@ -55,7 +55,7 @@ $(document).ready(function(){
 		//Temp variables
 		var dept, course, inst;
 		
-		courseTable.find('tr').each(function (i, el) {
+		courseTable.find('tr').each(function () {
 			var $row = $(this).find('td'),
             dept = $row.eq(0).text(),
             course = $row.eq(1).text(),
@@ -80,8 +80,7 @@ $(document).ready(function(){
 			rowCount++;
 			
 			/*console.log(deptId[i]);
-			console.log(courseId[i]);
-			console.log(instructor[i]);*/
+			console.log(courseId[i]);*/
 		});
 		
 		//Send to php file
@@ -92,7 +91,6 @@ $(document).ready(function(){
 				firstName:firstName, lastName:lastName, deptId:deptId, courseId:courseId},
             dataType: 'json',
             success:function(response){
-				console.log(response);
 				
 				$("#table-list").empty();
 	
@@ -105,8 +103,6 @@ $(document).ready(function(){
 				//keeps track of taken leaf nodes
 				var takenIDs = new Array();
 				
-				console.log(tree);
-				
 				var scheduleNo = 0;
 				var loopFlag = true;
 
@@ -115,19 +111,6 @@ $(document).ready(function(){
 				{
 					//create a dictionary for each day of the week
 					var week = getBreaks();
-					/*week['monStart'] = new Array();
-					week['monEnd'] = new Array();
-					week['tuesStart'] = new Array();
-					week['tuesEnd'] = new Array();
-					week['wedStart'] = new Array();
-					week['wedEnd'] = new Array();
-					week['thursStart'] = new Array();
-					week['thursEnd'] = new Array();
-					week['friStart'] = new Array();
-					week['friEnd'] = new Array();
-			
-			
-					getBreaks(week);*/
 			
 					loopFlag = getSchedule(coursesToPrint, tree.children[0], takenIDs, week);
 					

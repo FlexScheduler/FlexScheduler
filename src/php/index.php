@@ -183,8 +183,6 @@ include "config.php";
                             </tr>
                           </thead>
                           <tbody id="break-table-body">
-                            <tr>
-                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -228,18 +226,7 @@ include "config.php";
                             </tr>
                           </thead>
                           <tbody id="course-table-body">
-                            <tr>
-                              <td class="pt-3-half" contenteditable="true">CSC</td>
-                              <td class="pt-3-half" contenteditable="true">14400-Computer Science 1</td>
-                              <td class="pt-3-half" contenteditable="true">Blythe,Stephen</td>
-                              <td>
-                                <span class="table-remove"><button type="button" onclick = "remClass(this);"
-                                    class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span>
-                              </td>
-                            </tr>
                             <!-- This is our clonable table line -->
-
-
                           </tbody>
                         </table>
                       </div>

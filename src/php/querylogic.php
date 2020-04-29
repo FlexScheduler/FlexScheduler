@@ -39,7 +39,7 @@ for($i = 0; $i < $rowCount; $i++)
 	}
 
   if ($term == "Fall"){
-  //Online classes are wanted
+    //Online classes are wanted
   if($onlineCheck == True){
     //Department is selected
     if($departmentCheck == True){
@@ -47,111 +47,51 @@ for($i = 0; $i < $rowCount; $i++)
       if($courseCheck == True){
         //Teacher is selected
         if($instrucCheck == True){
-          //Breaks entered
-          if($breakCheck == True){
-            /*In Class Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+           
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-             strtTime,endTime) Where sessions.deptID = "$deptID" AND
-             sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-             instrLName = "$instrLName" AND sessions.strtTime NOT BETWEEN
-             '$strtTime' AND '$endTime' AND dayID != '$day' AND campus = $campus;
-
-             Online Query
-             SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-              sections.deptID = "$deptID" AND crseID = $crseID AND instrFName =
-              "$instrFName" AND instrLName = "$instrLName";
-             */
-          }
-          //Breaks not entered
-          else{
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND
-            sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-            instrLName = "$instrLName" AND campus = $campus;
+            strtTime,endTime) Where sessions.deptID = '$depart' AND
+            sessions.crseID = '$course' AND instrFName = '$instrFName' AND
+            instrLName = '$instrLName' AND campus = '$campus'";
 
-            Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+            //Online Query
+            $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID From Sections
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID AND instrFName =
-             "$instrFName" AND instrLName = "$instrLName"; */
-          }
+             sections.deptID = '$depart' AND crseID = '$course' AND instrFName =
+             '$instrFName' AND instrLName = '$instrLName'";
         }
         //Teacher not selected
         else{
-          //Breaks entered
-          if($breakCheck == True){
-            /*Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-            INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND sessions.crseID
-            = "$crseID" AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
-            AND dayID != '$day' AND campus = $campus;
-
-            //Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-             INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID;*/
-          }
-          //No breaks entered
-          else{
-            /*Query
-            crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
-            sessions.endTime,sessions.dayID,bldgID,rmNum,campus From Sessions I
-            nner Join Sections USING (deptID,crseID,secID) INNER JOIN
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
+            sessions.endTime,sessions.dayID,bldgID,rmNum, secID From sessions
+            INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
             sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-            Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
-            campus = $campus;
+            Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
+            campus = '$campus'";
 
             //Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+            $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID From Sections
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID;*/
-          }
+             sections.deptID = '$depart' AND crseID = '$course'";
         }//Teacher not selected
       }//Course selected
       //Course is not selected
       else{
-        //Breaks entered
-        if($breakCheck == True){
-          /*Query
-          SELECT secID, crseName,instrFName,instrLName,strtDate,endDate,
-          sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,campus
-          From S INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
-          sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-          Where sessions.deptID = "$deptID" AND sessions.strtTime NOT BETWEEN
-          $strtTime AND $endTime AND dayID != '$day' AND campus = $campus;
-
-          Online Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-          INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-          sections.deptID = "$deptID";*/
-        }
-        //Break not entered
-        else{
-          /*Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate,
+          //Query
+          $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
           sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-          campus FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+          secID, crseID FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
           INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-          strtTime,endTime) WHERE sessions.deptID = "$deptID" AND campus =
-          $campus;
+          strtTime,endTime) WHERE sessions.deptID = '$depart' AND campus =
+          '$campus'";
 
-          Online Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+          //Online Query
+          $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID, crseID From Sections
           INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-          sections.deptID = "$deptID";
-          */
-        }
+          sections.deptID = '$depart'";
       }//Course not entered
     }//Department Check
   }//Online selected
@@ -163,77 +103,35 @@ for($i = 0; $i < $rowCount; $i++)
       if($courseCheck == True){
         //Teacher is selected
         if($instrucCheck == True){
-          //Breaks entered
-          if($breakCheck == True){
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+            
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-             strtTime,endTime) Where sessions.deptID = "$deptID" AND
-             sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-             instrLName = "$instrLName" AND sessions.strtTime NOT BETWEEN
-             '$strtTime' AND '$endTime' AND dayID != '$day' AND campus = $campus;*/
-          }
-          //Breaks not entered
-          else{
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND
-            sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-            instrLName = "$instrLName" AND campus = $campus;*/
-          }
+            strtTime,endTime) Where sessions.deptID = '$depart' AND
+            sessions.crseID = '$course' AND instrFName = '$instrFName' AND
+            instrLName = '$instrLName' AND campus = '$campus'";
         }
         //Teacher not selected
         else{
-          //Breaks entered
-          if($breakCheck == True){
-            /*Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-            INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND sessions.crseID
-            = "$crseID" AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
-            AND dayID != '$day' AND campus = $campus;*/
-          }
-          //No breaks entered
-          else{
-            /*Query
-            crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
-            sessions.endTime,sessions.dayID,bldgID,rmNum,campus From Sessions I
-            nner Join Sections USING (deptID,crseID,secID) INNER JOIN
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
+            sessions.endTime,sessions.dayID,bldgID,rmNum, secID From sessions
+            INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
             sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-            Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
-            campus = $campus;*/
-          }
+            Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
+            campus = '$campus'";
         }//Teacher not selected
       }//Course selected
       //Course is not selected
       else{
-        //Breaks entered
-        if($breakCheck == True){
-          /*
-          SELECT secID, crseName,instrFName,instrLName,strtDate,endDate,
-          sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,campus
-          From S INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
-          sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-          Where sessions.deptID = "$deptID" AND sessions.strtTime NOT BETWEEN
-          $strtTime AND $endTime AND dayID != '$day' AND campus = $campus;*/
-        }
-        //Break not entered
-        else{
-          /*Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate,
+          //Query
+          $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
           sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-          campus FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+          secID, crseID FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
           INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-          strtTime,endTime) WHERE sessions.deptID = "$deptID" AND campus =
-          $campus;*/
-        }
+          strtTime,endTime) WHERE sessions.deptID = '$depart' AND campus =
+          '$campus'";
       }//Course not entered
     }//Department Check
   }//No Online
@@ -337,7 +235,7 @@ for($i = 0; $i < $rowCount; $i++)
   }//No Online
   }//TermCheck
   if ($term == "Summer"){
-  //Online classes are wanted
+    //Online classes are wanted
   if($onlineCheck == True){
     //Department is selected
     if($departmentCheck == True){
@@ -345,111 +243,51 @@ for($i = 0; $i < $rowCount; $i++)
       if($courseCheck == True){
         //Teacher is selected
         if($instrucCheck == True){
-          //Breaks entered
-          if($breakCheck == True){
-            /*In Class Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+           
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-             strtTime,endTime) Where sessions.deptID = "$deptID" AND
-             sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-             instrLName = "$instrLName" AND sessions.strtTime NOT BETWEEN
-             '$strtTime' AND '$endTime' AND dayID != '$day' AND campus = $campus;
-
-             Online Query
-             SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-              sections.deptID = "$deptID" AND crseID = $crseID AND instrFName =
-              "$instrFName" AND instrLName = "$instrLName";
-             */
-          }
-          //Breaks not entered
-          else{
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND
-            sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-            instrLName = "$instrLName" AND campus = $campus;
+            strtTime,endTime) Where sessions.deptID = '$depart' AND
+            sessions.crseID = '$course' AND instrFName = '$instrFName' AND
+            instrLName = '$instrLName' AND campus = '$campus'";
 
-            Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+            //Online Query
+            $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID From Sections
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID AND instrFName =
-             "$instrFName" AND instrLName = "$instrLName"; */
-          }
+             sections.deptID = '$depart' AND crseID = '$course' AND instrFName =
+             '$instrFName' AND instrLName = '$instrLName'";
         }
         //Teacher not selected
         else{
-          //Breaks entered
-          if($breakCheck == True){
-            /*Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-            INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND sessions.crseID
-            = "$crseID" AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
-            AND dayID != '$day' AND campus = $campus;
-
-            //Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-             INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID;*/
-          }
-          //No breaks entered
-          else{
-            /*Query
-            crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
-            sessions.endTime,sessions.dayID,bldgID,rmNum,campus From Sessions I
-            nner Join Sections USING (deptID,crseID,secID) INNER JOIN
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
+            sessions.endTime,sessions.dayID,bldgID,rmNum, secID From sessions
+            INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
             sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-            Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
-            campus = $campus;
+            Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
+            campus = '$campus'";
 
             //Online Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+            $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID From Sections
              INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-             sections.deptID = "$deptID" AND crseID = $crseID;*/
-          }
+             sections.deptID = '$depart' AND crseID = '$course'";
         }//Teacher not selected
       }//Course selected
       //Course is not selected
       else{
-        //Breaks entered
-        if($breakCheck == True){
-          /*Query
-          SELECT secID, crseName,instrFName,instrLName,strtDate,endDate,
-          sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,campus
-          From S INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
-          sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-          Where sessions.deptID = "$deptID" AND sessions.strtTime NOT BETWEEN
-          $strtTime AND $endTime AND dayID != '$day' AND campus = $campus;
-
-          Online Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
-          INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-          sections.deptID = "$deptID";*/
-        }
-        //Break not entered
-        else{
-          /*Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate,
+          //Query
+          $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
           sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-          campus FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+          secID, crseID FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
           INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-          strtTime,endTime) WHERE sessions.deptID = "$deptID" AND campus =
-          $campus;
+          strtTime,endTime) WHERE sessions.deptID = '$depart' AND campus =
+          '$campus'";
 
-          Online Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate From Sections
+          //Online Query
+          $sqlOnline = "SELECT crseName,instrFName,instrLName,strtDate,endDate, secID, crseID From Sections
           INNER JOIN arrangedInstructors USING(deptID,crseID,secID)  Where
-          sections.deptID = "$deptID";
-          */
-        }
+          sections.deptID = '$depart'";
       }//Course not entered
     }//Department Check
   }//Online selected
@@ -461,77 +299,35 @@ for($i = 0; $i < $rowCount; $i++)
       if($courseCheck == True){
         //Teacher is selected
         if($instrucCheck == True){
-          //Breaks entered
-          if($breakCheck == True){
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
+            
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
             sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-             strtTime,endTime) Where sessions.deptID = "$deptID" AND
-             sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-             instrLName = "$instrLName" AND sessions.strtTime NOT BETWEEN
-             '$strtTime' AND '$endTime' AND dayID != '$day' AND campus = $campus;*/
-          }
-          //Breaks not entered
-          else{
-            /*
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+            secID From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
             INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND
-            sessions.crseID = "$crseID" AND instrFName = "$instrFName" AND
-            instrLName = "$instrLName" AND campus = $campus;*/
-          }
+            strtTime,endTime) Where sessions.deptID = '$depart' AND
+            sessions.crseID = '$course' AND instrFName = '$instrFName' AND
+            instrLName = '$instrLName' AND campus = '$campus'";
         }
         //Teacher not selected
         else{
-          //Breaks entered
-          if($breakCheck == True){
-            /*Query
-            SELECT crseName,instrFName,instrLName,strtDate,endDate,
-            sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-            campus From Sessions INNER JOIN Sections USING (deptID,crseID,secID)
-            INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-            strtTime,endTime) Where sessions.deptID = "$deptID" AND sessions.crseID
-            = "$crseID" AND sessions.strtTime NOT BETWEEN '$strtTime' AND '$endTime'
-            AND dayID != '$day' AND campus = $campus;*/
-          }
-          //No breaks entered
-          else{
-            /*Query
-            crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
-            sessions.endTime,sessions.dayID,bldgID,rmNum,campus From Sessions I
-            nner Join Sections USING (deptID,crseID,secID) INNER JOIN
+            //Query
+            $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,sessions.strtTime,
+            sessions.endTime,sessions.dayID,bldgID,rmNum, secID From sessions
+            INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
             sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-            Where sessions.deptID = "$deptID" AND sessions.crseID = "$crseID" AND
-            campus = $campus;*/
-          }
+            Where sessions.deptID = '$depart' AND sessions.crseID = '$course' AND
+            campus = '$campus'";
         }//Teacher not selected
       }//Course selected
       //Course is not selected
       else{
-        //Breaks entered
-        if($breakCheck == True){
-          /*
-          SELECT secID, crseName,instrFName,instrLName,strtDate,endDate,
-          sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,campus
-          From S INNER JOIN Sections USING (deptID,crseID,secID) INNER JOIN
-          sessionInstructors Using(deptID,crseID,secID,dayID,strtTime,endTime)
-          Where sessions.deptID = "$deptID" AND sessions.strtTime NOT BETWEEN
-          $strtTime AND $endTime AND dayID != '$day' AND campus = $campus;*/
-        }
-        //Break not entered
-        else{
-          /*Query
-          SELECT crseName,instrFName,instrLName,strtDate,endDate,
+          //Query
+          $sql = "SELECT crseName,instrFName,instrLName,strtDate,endDate,
           sessions.strtTime,sessions.endTime,sessions.dayID,bldgID,rmNum,
-          campus FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
+          secID, crseID FROM Sessions INNER JOIN Sections USING (deptID,crseID,secID)
           INNER JOIN sessionInstructors Using(deptID,crseID,secID,dayID,
-          strtTime,endTime) WHERE sessions.deptID = "$deptID" AND campus =
-          $campus;*/
-        }
+          strtTime,endTime) WHERE sessions.deptID = '$depart' AND campus =
+          '$campus'";
       }//Course not entered
     }//Department Check
   }//No Online

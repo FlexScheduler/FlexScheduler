@@ -72,16 +72,16 @@ $(document).ready(function(){
 			var nameField = $("#courseName").val().split(',');
 			var courseID = nameField[0];
 			var courseName = nameField[1];
-			$("#course-table-body").append('<tr><td class="pt-3-half" contenteditable="true">' + deptId + 
-			'</td><td class="pt-3-half" contenteditable="true">' + courseID + "-" + courseName + 
-			'</td><td class="pt-3-half" contenteditable="true">' + instructor + 
+			$("#course-table-body").append('<tr><td class="pt-3-half">' + deptId + 
+			'</td><td class="pt-3-half">' + courseID + "-" + courseName + 
+			'</td><td class="pt-3-half">' + instructor + 
 			'</td><td><span class="table-remove"><button type="button" onclick = "remClass(this);"class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>');
 		}
 		else
 		{
-			$("#course-table-body").append('<tr><td class="pt-3-half" contenteditable="true">' + deptId + 
-			'</td><td class="pt-3-half" contenteditable="true">Any' + 
-			'</td><td class="pt-3-half" contenteditable="true">Any' + 
+			$("#course-table-body").append('<tr><td class="pt-3-half">' + deptId + 
+			'</td><td class="pt-3-half">Any' + 
+			'</td><td class="pt-3-half">Any' + 
 			'</td><td><span class="table-remove"><button type="button" onclick = "remClass(this);"class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>');
 		}
 		
