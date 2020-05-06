@@ -5,10 +5,10 @@
     require "includes/convert_date.php";
 
     // define database connection
-    define("DB_HOST", "sql309.epizy.com");
-    define("DB_USER", "epiz_25500412");
-    define("DB_PASS", "TmoFcb8z1QSHsG");
-    define("DB_NAME", "epiz_25500412_FlexScheduler");
+    define("DB_HOST", "localhost");
+    define("DB_USER", "root");
+    define("DB_PASS", "");
+    define("DB_NAME", "flexscheduler");
 ?>
 
 <html>
@@ -104,6 +104,11 @@
           }
         }
     </style>
+
+    <!-- jQuery, Popper, and Bootstrap JavaScript -->
+    <script src="jquery/dist/jquery.min.js"></script>
+    <script src="popper/dist/umd/popper.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
 
   <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -151,7 +156,7 @@
       <form id="academicForm">
         <h3>Academic Filters</h3>
         <div class="form-group form-row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="col-form-label" for="termSelect">Term</label>
             <select class="form-control select" id="termSelect" name="termSelect">
               <option value="fall" selected>Fall</option>
@@ -159,7 +164,7 @@
               <option value="summer">Summer</option>
             </select>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="col-form-label" for="campusSelect">Campus</label>
             <select class="form-control select" id="campusSelect" name="campusSelect">
               <?php
@@ -184,16 +189,6 @@
                   $conn->close();
               ?>
             </select>
-          </div>
-        </div>
-        <div class="form-group form-row">
-          <div class="col-md-4">
-            <label class="col-form-label" for="minimumCreditSelect">Minimum Credits</label>
-            <input class="form-control" type="number" id="minimumCreditSelect" name="minimumCreditSelect" min="1" max="23" value="12" />
-          </div>
-          <div class="col-md-4">
-            <label class="col-form-label" for="maximumCreditSelect">Maximum Credits</label>
-            <input class="form-control" type="number" id="maximumCreditSelect" name="maximumCreditSelect" min="2" max="24" value="18" />
           </div>
           <div class="col-md-4">
             <label class="col-form-label" for="onlineSelect">Online</label>
@@ -480,8 +475,8 @@
       </form>
     </div>
 
-    <!--TODO Schedules -->
-    <div class="container-fluid padding">
+    <!-- Schedule Tables -->
+    <div class="container-fluid padding" id="scheduleTable">
     </div>
 
     <!-- Footer -->
@@ -512,11 +507,6 @@
       </div>
     </footer>
 
-    <!-- jQuery, Popper, and Bootstrap JavaScript -->
-    <script src="jquery/dist/jquery.min.js"></script>
-    <script src="popper/dist/umd/popper.min.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-
     <!-- Table Functions -->
     <script>
     $(document).ready(function() {
@@ -532,18 +522,6 @@
         $("#campusSelect").on("change", function() {
             window.campus = $("#campusSelect").val();
             $("#departmentSelect").trigger("reset");
-        });
-
-        // minimum credit select
-        window.minCredit = $("#minimumCreditSelect").val();
-        $("#minimumCreditSelect").on("change", function() {
-            window.minCredit = $("#minimumCreditSelect").val();
-        });
-
-        // maximum credit select
-        window.maxCredit = $("#maximumCreditSelect").val();
-        $("#maximumCreditSelect").on("change", function() {
-            window.maxCredit = $("#maximumCreditSelect").val();
         });
 
         // online select
@@ -764,48 +742,34 @@
         }
 
         // create schedules
-        $("#submitAll").on("click", function() {
-            /*TODO
-            var AcademicData;
-            AcademicData = $.toJSON(storeAcademic());
-            $.ajax({
-                type: "POST",
-                url: "includes/create_schedules.php",
-                data: "pAcademicData=" + AcademicData,
-                success: function(response) {
-                    //TODO THIS IS JUST TESTINTG
-                    //alert(response);
-                }
-            });*/
-
+        $("#submitAll").on("click", function(event) {
+            event.preventDefault();
             var CourseData;
             CourseData = JSON.parse(JSON.stringify(storeCourses()));
-            $.ajax({
-                type: "POST",
-                url: "includes/create_schedules.php",
-                data: "pCourseData=" + CourseData,
-                success: function(response) {
-                    //TODO THIS IS JUST TESTINTG
-                    //alert(response);
-                }
-            });
-
             var PersonalData;
             PersonalData = JSON.parse(JSON.stringify(storePersonal()));
             $.ajax({
                 type: "POST",
                 url: "includes/create_schedules.php",
-                data: "pPersonalData=" + PersonalData,
+                dataType: "text",
+                data: {"pCourseData": CourseData, "pPersonalData": PersonalData, "pTerm": $("#termSelect").val()},
                 success: function(response) {
-                    //TODO THIS IS JUST TESTINTG
-                    //alert(response);
+                    $('#scheduleTable').empty();
+                    if (response == "") {
+                        $('#scheduleTable').append(
+                            '<div class="alert alert-danger alert-dismissable">' +
+                            '<button type="button" class="close" ' +
+                                    'data-dismiss="alert" aria-hidden="true">' +
+                                '&times;' +
+                            '</button>ERROR! Schedule creation was not possible. Please select a different combination of courses. ' +
+                            '</div>');
+                    }
+                    else {
+                        $('#scheduleTable').append(response);
+                    }
                 }
             });
         });
-
-        //TODO store academic
-        function storeAcademic() {
-        }
 
         // store courses
         function storeCourses() {
