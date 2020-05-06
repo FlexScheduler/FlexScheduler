@@ -752,7 +752,10 @@
                 type: "POST",
                 url: "includes/create_schedules.php",
                 dataType: "text",
-                data: {"pCourseData": CourseData, "pPersonalData": PersonalData, "pTerm": $("#termSelect").val()},
+                data: {"pCourseData": CourseData,
+                    "pPersonalData": PersonalData,
+                    "pTerm": $("#termSelect").val(),
+                    "pCampus": $("#campusSelect").val()},
                 success: function(response) {
                     $('#scheduleTable').empty();
                     if (response == "") {
