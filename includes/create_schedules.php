@@ -20,6 +20,9 @@ if (isset($_POST["pCourseData"]) && isset($_POST["pTerm"])) {
     $strtMonth = $months[0];
     $endMonth = $months[1];
 
+    // decode campus
+    $campus = json_decode(stripcslashes(json_encode($_POST["pCampus"])), true);
+
     // create time class
     class Time
     {
@@ -209,6 +212,7 @@ if (isset($_POST["pCourseData"]) && isset($_POST["pTerm"])) {
             $sql .= "SessionInstructors.instrLName = '" . $instrFull[0] . "' AND ";
             $sql .= "SessionInstructors.instrFName = '" . $instrFull[1] . "' AND ";
         }
+        $sql .= "Sections.campus = '" . $campus . "' AND ";
         $sql .=
             "Sections.deptID = SessionInstructors.deptID AND
             Sections.crseID = SessionInstructors.crseID AND
@@ -345,11 +349,13 @@ if (isset($_POST["pCourseData"]) && isset($_POST["pTerm"])) {
     $tree->build_tree($nodeArr, 0);
 
     // get leaf nodes
-    $counter = 1;
     foreach ($tree->roots as $root) {
         $box = array();
         $tree->get_leaves($root, 0, $maxDepth - 1, $box);
     }
+
+    // return schedules
+    $counter = 1;
     foreach ($tree->leaves as $schedule) {
         // create title for table
         $newDiv =
