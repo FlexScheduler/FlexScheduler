@@ -1,10 +1,22 @@
 # Flex Scheduler
 
-This application aims to help students create better and more flexible schedules. An administrator can upload the course catalog to be used by the application.
+This application aims to help students create better and more flexible schedules. An administrator can upload the course catalogs to be used by the application.
 
 ## Getting Started
 
-To test this application locally install [XAMPP](https://www.apachefriends.org/download.html) on your personal machine and run the [Home Page](application/src/php/index.php) file. To import course catalog data, log in as an administrator and follow the upload prompts.
+The full instructions can be found [here](documentation/FlexSchedulerUserManual.docx).
+
+You will need:
+  * MySQL database
+  * Web server that can run PHP7 or later
+  * Lindenwood University Course Catalog(s)
+  * Editor capable of editing PHP
+  
+1. Download this GitHub project as a ZIP folder
+2. Unzip the folder and place it in your web server
+3. Upload at least one Lindenwood University Course Catalog to your MySQL database by using the admin.php page of the application
+4. Use the index.php page of the application to generate schedules
+
 
 ## Built With
 
@@ -12,9 +24,11 @@ To test this application locally install [XAMPP](https://www.apachefriends.org/d
 * HTML
 * CSS
 * Javascript
-* [jQuery](https://code.jquery.com/jquery-3.3.1.slim.min.js)
-* [Popper](https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js)
-* [Bootstrap](https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js)
+* Popper
+* Bootstrap
+* jQuery
+* AJAX
+
 
 ## Authors
 
